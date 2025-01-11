@@ -1,0 +1,133 @@
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, CallbackContext
+import sqlite3
+
+# --- Database Setup ---
+def setup_database():
+    conn = sqlite3.connect("chatbot.db")
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                        user_id INTEGER PRIMARY KEY,
+                        age INTEGER,
+                        city TEXT,
+                        gender TEXT,
+                        coins INTEGER DEFAULT 10
+                    )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS chats (
+                        chat_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user1_id INTEGER,
+                        user2_id INTEGER,
+                        status TEXT DEFAULT 'active'
+                    )''')
+    conn.commit()
+    conn.close()
+
+# --- Helper Functions ---
+def get_user_profile(user_id):
+    conn = sqlite3.connect("chatbot.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+def create_user_profile(user_id):
+    conn = sqlite3.connect("chatbot.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT OR IGNORE INTO users (user_id) VALUES (?)", (user_id,))
+    conn.commit()
+    conn.close()
+
+def update_user_profile(user_id, field, value):
+    conn = sqlite3.connect("chatbot.db")
+    cursor = conn.cursor()
+    cursor.execute(f"UPDATE users SET {field} = ? WHERE user_id = ?", (value, user_id))
+    conn.commit()
+    conn.close()
+
+# --- Command Handlers ---
+def start(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    create_user_profile(user_id)
+    update.message.reply_text(
+        "به ربات کلکل خوش آمدی! \n"
+        "\nاولین کارت ثبت پروفایلته. \n"
+        "\u0633ری بزن به /profile \nبعد می‌تونی \u062aصادفی \u0686ت \u06a9نی: /random_chat \n"
+    )
+
+def profile(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    user = get_user_profile(user_id)
+
+    if user:
+        age, city, gender, coins = user[1], user[2], user[3], user[4]
+        update.message.reply_text(
+            f"پروفایل شما:\n"
+            f"\u0633ن: {age or 'ثبت نشده'}\n"
+            f"\u0634هر: {city or 'ثبت نشده'}\n"
+            f"\u062cنسیت: {gender or 'ثبت نشده'}\n"
+            f"\u0633که: {coins}\n"
+            f"\nاز \u062fستور /edit_profile برای ویرایش پروفایل خود استفاده کنید."
+        )
+    else:
+        update.message.reply_text("\u062eطایی رخ داد. \u0644طفا /start را از نو اجرا کنید.")
+
+
+def edit_profile(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton("\u0633ن", callback_data="edit_age")],
+        [InlineKeyboardButton("\u0634هر", callback_data="edit_city")],
+        [InlineKeyboardButton("\u062cنسیت", callback_data="edit_gender")],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(
+        "\u0645وردی که می‌خواید ویرایش کنید را انتخاب کنید:", reply_markup=reply_markup
+    )
+
+# Callback for editing profile
+def handle_edit_profile(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = query.from_user.id
+    data = query.data
+
+    if data == "edit_age":
+        query.message.reply_text("\u0633ن خود را وارد کنید:")
+        context.user_data['edit_field'] = 'age'
+    elif data == "edit_city":
+        query.message.reply_text("\u0634هر خود را وارد کنید:")
+        context.user_data['edit_field'] = 'city'
+    elif data == "edit_gender":
+        query.message.reply_text("\u062cنسیت خود را وارد کنید (\u0645\u0631\u062f / \u0632\u0646):")
+        context.user_data['edit_field'] = 'gender'
+    query.answer()
+
+# Handle text for editing
+def handle_text(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    edit_field = context.user_data.get('edit_field')
+
+    if edit_field:
+        update_user_profile(user_id, edit_field, update.message.text)
+        update.message.reply_text(f"\u067eروفایل \u0634\u0645\u0627 \u0628\u0627 \u0645\u0648ف\u0642\u06cc\u062a \u0628\u0647‌\u0631\u0648ز \u0634\u062f!")
+        context.user_data['edit_field'] = None
+    else:
+        update.message.reply_text("\u062fستور \u0646امشخص است.")
+
+# --- Main ---
+def main():
+    setup_database()
+
+    updater = Updater("7197158830:AAHgteJ6xYea0lYRSRwWLNc82Phguy_DsYE")
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("profile", profile))
+    dispatcher.add_handler(CommandHandler("edit_profile", edit_profile))
+    dispatcher.add_handler(CallbackQueryHandler(handle_edit_profile))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_text))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == "__main__":
+    main()
