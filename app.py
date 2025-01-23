@@ -2,9 +2,7 @@ import os
 import telebot
 from telebot import types
 from datetime import datetime
-from keep_alive import keep_alive
 
-keep_alive()
 
 # تنظیمات ربات
 BOT_TOKEN = '7547577719:AAEoMyuYY2_DDOhNee94U7C6bLrRUyYHYxE'
