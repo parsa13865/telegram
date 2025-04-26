@@ -2,7 +2,7 @@
 ob_start('ob_gzhandler');
 $ttti = time();
 error_reporting(0);
-define('API_KEY','[*[TOKEN]*]');
+define('API_KEY','8010893395:AAGcgX5SzKConIU6gXqOXdSLzlfcBT22HXk');
 date_default_timezone_set('Asia/Tehran');
 //-----------------------------------------------------------------------------------------
 $telegram_ip_ranges = [
@@ -131,11 +131,11 @@ $message_id2 = $update->callback_query->message->message_id;
 $photo = $message->photo;
 $mem = bot('getChatMembersCount',['chat_id'=>''.$text])->result;
 $sudo = ['[*[ADMIN]*]','[*[ADMIN]*]','[*[ADMIN]*]'];
-$ADMIN = array("[*[ADMIN]*]","[*[ADMIN]*]");
-$admin = "[*[ADMIN]*]"; //نایدی عددی ادمی
+$ADMIN = array("[1022703811","1022703811");
+$admin = "1022703811"; //نایدی عددی ادمی
 $channel = file_get_contents("channel.txt"); 
 $channelcode = file_get_contents("channelcode.txt"); 
-$token = "[*[TOKEN]*]";
+$token = "8010893395:AAGcgX5SzKConIU6gXqOXdSLzlfcBT22HXk";
 $Support = file_get_contents("Support.txt");
 @$staroff = file_get_contents("staroff.txt");
 @$bankboton = file_get_contents("bankboton.txt");
@@ -761,8 +761,8 @@ $admin3 = file_get_contents("data/admin3.txt");
 }else{
 $admin3 = "[*[ADMIN]*]";
 }
-if(file_exists("data/admin4.txt")){
-$admin4 = file_get_contents("data/admin4.txt");
+if(file_exists("data/4.txt")){
+$4 = file_get_contents("data/4.txt");
 }else{
 $admin4 = "[*[ADMIN]*]";
 }
