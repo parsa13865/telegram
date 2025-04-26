@@ -1,5 +1,6 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 //----------------------------------------//
 define('API_KEY','7471381243:AAHVkqklqncQ1MUbI7X46khQVlJrJZmlBa4');
 $admin = '1022703811';
