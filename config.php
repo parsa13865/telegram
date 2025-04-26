@@ -1,11 +1,11 @@
 <?php
 error_reporting(0);
 //----------------------------------------//
-define('API_KEY','5437050180:AAE-BnLBRqHIPc7mLO1ZPXuBtmOW-9A5--U');
+define('API_KEY','7471381243:AAHVkqklqncQ1MUbI7X46khQVlJrJZmlBa4');
 $admin = '1022703811';
-$boter_id = 'Tlauncher_minecraftbot';
+$boter_id = 'vdsvsdvsvd_bot';
 $botsaz_id = '1022703811';
 $id_adady = '1022703811';
-$tokens_bot = '5437050180:AAE-BnLBRqHIPc7mLO1ZPXuBtmOW-9A5--U';
+$tokens_bot = '7471381243:AAHVkqklqncQ1MUbI7X46khQVlJrJZmlBa4';
 //----------------------------------------//
 ?>
