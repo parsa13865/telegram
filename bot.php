@@ -6287,3 +6287,10 @@ saveJson("melat/$userID.json",$user);
 if(file_exists(error_log))
 unlink(error_log);
 ?>
+
+// در bot.php یا فایل جداگانه برای تنظیم اولیه
+$webhookUrl = 'https://your-app.up.railway.app/bot.php';
+bot('setWebhook', [
+    'url' => $webhookUrl,
+    'secret_token' => getenv('WEBHOOK_SECRET') ?: 'your-secret-token'
+]);
