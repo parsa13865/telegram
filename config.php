@@ -1,11 +1,11 @@
 <?php
 error_reporting(0);
 //----------------------------------------//
-define('API_KEY','[*[TOK]*]');
-$admin = '[*[ADM]*]';
-$boter_id = '[*[userBOT]*]';
-$botsaz_id = '[*[idbotsaz]*]';
-$id_adady = '[*[idaddy]*]';
-$tokens_bot = '[*[TOK]*]';
+define('API_KEY','5437050180:AAE-BnLBRqHIPc7mLO1ZPXuBtmOW-9A5--U');
+$admin = '1022703811';
+$boter_id = 'Tlauncher_minecraftbot';
+$botsaz_id = '1022703811';
+$id_adady = '1022703811';
+$tokens_bot = '5437050180:AAE-BnLBRqHIPc7mLO1ZPXuBtmOW-9A5--U';
 //----------------------------------------//
 ?>
